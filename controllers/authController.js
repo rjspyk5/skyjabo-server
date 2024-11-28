@@ -1,11 +1,18 @@
 const bcrypt = require("bcrypt");
+const { findUserByEmail, createUser } = require("../model/userModel");
+
 const register = async (req, res) => {
   const userDetails = req.body;
-  //todo: chcek previous account first if have account then back false or true
-
+  const isAlreadyHaveAccount = await findUserByEmail(userDetails.email);
+  if (isAlreadyHaveAccount) {
+    return res.send({ message: "User already exists" });
+  }
   const hashedPass = await bcrypt.hash(userDetails?.password, 10);
   // todo: save into database if ok then send response ok
-  res.send({ result: hashedPass });
+  const result = await createUser("test", userDetails?.email, hashedPass, 1);
+  if (result?._id) {
+    return res.send({ message: "User Created Successflly,Now you can login" });
+  }
 };
 
 module.exports = { register };
