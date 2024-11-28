@@ -4,10 +4,11 @@ const { register, login } = require("./controllers/authController");
 const connectDb = require("./config/db");
 const { verifyToken } = require("./middlewares/authMiddlewares");
 const cookieParser = require("cookie-parser");
+require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT ?? 5000;
-require("dotenv").config();
+
 // connect Database
 connectDb();
 
@@ -21,9 +22,13 @@ app.use(
   })
 );
 
-// routes
+//public
 app.get("/", (req, res) => res.send("Test"));
 app.post("/register", register);
 app.post("/login", login);
 app.get("/test", verifyToken);
+
+// protected
+
+// protected+admin only
 app.listen(port, () => console.log("server is running"));

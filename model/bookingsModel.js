@@ -9,3 +9,6 @@ const bookingsSchema = new mongoose.Schema({
 });
 
 const bookingCollection = mongoose.model("bookingCollection", bookingsSchema);
+
+const getAllBookings = async () => await bookingCollection.find();
+const getBookingsById = async (id) => await bookingCollection.findById(id);
