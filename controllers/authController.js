@@ -29,7 +29,7 @@ const login = async (req, res) => {
   if (!isMatchedPassword) {
     return res.send({ message: "Password didn't match,try again" });
   }
-
+  // create token
   const token = jwt.sign(
     {
       userId: isUser._id,
@@ -38,6 +38,7 @@ const login = async (req, res) => {
     process.env.ACCESS_TOKEN,
     { expiresIn: "7d" }
   );
+  // sending token and response to frontend
   res
     .cookie("token", token, {
       httpOnly: true,
