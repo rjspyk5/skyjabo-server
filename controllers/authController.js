@@ -48,4 +48,14 @@ const login = async (req, res) => {
     })
     .send({ message: "Login Successfull" });
 };
-module.exports = { register, login };
+
+const logout = async (req, res) => {
+  return res
+    .clearCookie("token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+    })
+    .send({ message: "Logout Successfully" });
+};
+module.exports = { register, login, logout };

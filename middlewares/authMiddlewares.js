@@ -2,7 +2,8 @@ const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 
 const verifyToken = async (req, res, next) => {
-  const token = req?.cookie?.token;
+  const token = req?.cookies?.token;
+
   if (!token) {
     return res.status(403).send({ message: "Not Authorized" });
   }
@@ -12,8 +13,9 @@ const verifyToken = async (req, res, next) => {
         .status(401)
         .send({ message: "Invalid token or token expired" });
     }
-    console.log(decoded);
+
     req.user = decoded;
+
     next();
   });
 };

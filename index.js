@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const { register, login } = require("./controllers/authController");
+const { register, login, logout } = require("./controllers/authController");
 const connectDb = require("./config/db");
 const { verifyToken } = require("./middlewares/authMiddlewares");
 const cookieParser = require("cookie-parser");
@@ -21,11 +21,14 @@ app.use(
     credentials: true,
   })
 );
+//
 
 //public
 app.get("/", (req, res) => res.send("Test"));
 app.post("/register", register);
 app.post("/login", login);
+app.post("/logout", logout);
+app.get("/authstate", verifyToken, async (req, res) => res.send(req?.user));
 app.get("/test", verifyToken);
 
 // protected
