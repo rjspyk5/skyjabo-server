@@ -1,6 +1,7 @@
 const {
   createBookingToDb,
   getAllBookingsFromDb,
+  getBookingsById,
 } = require("../model/bookingsModel");
 
 const createBookings = async (req, res) => {
@@ -24,4 +25,13 @@ const getAllBookings = async (req, res) => {
     res.send({ message: "Something Went Wrong" });
   }
 };
-module.exports = { createBookings, getAllBookings };
+const getBooking = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const result = await getBookingsById(id);
+    res.send(result);
+  } catch (error) {
+    res.send({ message: "Something Went Wrong" });
+  }
+};
+module.exports = { createBookings, getAllBookings, getBooking };
