@@ -1,5 +1,8 @@
 const Amadeus = require("amadeus");
-const { createFlightToDb } = require("../model/flightsModel");
+const {
+  createFlightToDb,
+  getAllFlightsFromDb,
+} = require("../model/flightsModel");
 const amadeus = new Amadeus({
   clientId: process.env.AMADEUS_CLIENT_ID,
   clientSecret: process.env.AMADEUS_CLIENT_SECRET,
@@ -31,4 +34,14 @@ const createFlight = async (req, res) => {
   }
 };
 
-module.exports = { flightSearch, createFlight };
+const getAllFlights = async (req, res) => {
+  try {
+    const result = await getAllFlightsFromDb();
+    console.log(result);
+    res.send({ message: "Successfully retrive data" });
+  } catch (error) {
+    res.send({ message: "Something Went Wrong" });
+  }
+};
+
+module.exports = { flightSearch, createFlight, getAllFlights };
