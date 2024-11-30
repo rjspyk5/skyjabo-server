@@ -3,6 +3,7 @@ const {
   createFlightToDb,
   getAllFlightsFromDb,
   deleteFlight,
+  updatFlightToDb,
 } = require("../model/flightsModel");
 const amadeus = new Amadeus({
   clientId: process.env.AMADEUS_CLIENT_ID,
@@ -55,9 +56,20 @@ const deleteFlightById = async (req, res) => {
   }
 };
 
+const updateFlight = async (req, res) => {
+  const id = req.params.id;
+  const data = req.body;
+  const result = await updatFlightToDb(id, data);
+  if (result.modifiedCount) {
+    return res.send({ message: "Update Successfully" });
+  }
+  return res.send({ message: "Something Went Wrong" });
+};
+
 module.exports = {
   flightSearch,
   createFlight,
   getAllFlights,
   deleteFlightById,
+  updateFlight,
 };

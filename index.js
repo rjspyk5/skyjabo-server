@@ -9,6 +9,7 @@ const {
   createFlight,
   getAllFlights,
   deleteFlightById,
+  updateFlight,
 } = require("./controllers/flightsController");
 
 require("dotenv").config();
@@ -38,8 +39,10 @@ app.post("/logout", logout);
 app.get("/authstate", verifyToken, async (req, res) => res.send(req?.user));
 app.get("/flights/search", flightSearch);
 app.post("/flights", createFlight);
+app.post("/flights", createFlight);
 app.get("/flights/adminadded", getAllFlights);
 app.delete("/flights/:id", deleteFlightById);
+app.put("/flights/:id", updateFlight);
 
 // protected
 
