@@ -1,4 +1,7 @@
-const { createBookingToDb } = require("../model/bookingsModel");
+const {
+  createBookingToDb,
+  getAllBookingsFromDb,
+} = require("../model/bookingsModel");
 
 const createBookings = async (req, res) => {
   const data = req.body;
@@ -13,4 +16,12 @@ const createBookings = async (req, res) => {
   }
 };
 
-module.exports = { createBookings };
+const getAllBookings = async (req, res) => {
+  try {
+    const result = await getAllBookingsFromDb();
+    res.send(result);
+  } catch (error) {
+    res.send({ message: "Something Went Wrong" });
+  }
+};
+module.exports = { createBookings, getAllBookings };

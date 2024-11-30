@@ -11,7 +11,10 @@ const {
   deleteFlightById,
   updateFlight,
 } = require("./controllers/flightsController");
-const { createBookings } = require("./controllers/bookingController");
+const {
+  createBookings,
+  getAllBookings,
+} = require("./controllers/bookingController");
 
 require("dotenv").config();
 
@@ -46,6 +49,7 @@ app.delete("/flights/:id", deleteFlightById);
 app.put("/flights/:id", updateFlight);
 app.get("/flights", getAllFlights);
 app.post("/bookings", createBookings);
+app.get("/bookings", getAllBookings);
 
 // protected
 
