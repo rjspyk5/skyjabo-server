@@ -39,7 +39,6 @@ const createFlight = async (req, res) => {
 const getAllFlights = async (req, res) => {
   try {
     const result = await getAllFlightsFromDb();
-
     res.send(result);
   } catch (error) {
     res.send({ message: "Something Went Wrong" });
