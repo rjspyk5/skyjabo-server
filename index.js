@@ -4,7 +4,10 @@ const { register, login, logout } = require("./controllers/authController");
 const connectDb = require("./config/db");
 const { verifyToken } = require("./middlewares/authMiddlewares");
 const cookieParser = require("cookie-parser");
-const { flightSearch } = require("./controllers/flightsController");
+const {
+  flightSearch,
+  createFlight,
+} = require("./controllers/flightsController");
 require("dotenv").config();
 
 const app = express();
@@ -31,6 +34,7 @@ app.post("/login", login);
 app.post("/logout", logout);
 app.get("/authstate", verifyToken, async (req, res) => res.send(req?.user));
 app.get("/flights/search", flightSearch);
+app.post("/flights", createFlight);
 
 // protected
 
