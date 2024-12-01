@@ -47,17 +47,21 @@ const getAllFlights = async (req, res) => {
   }
 };
 const getFlight = async (req, res) => {
-  const id = req.params;
+  const id = req.params.id;
+
   try {
     const result = await getFlightsById(id);
+
     res.send(result);
   } catch (error) {
+    console.log(error);
     res.send({ message: "Something Went Wrong" });
   }
 };
 
 const deleteFlightById = async (req, res) => {
   const id = req.params.id;
+
   try {
     const result = await deleteFlight(id);
     if (result.deletedCount) {
@@ -83,8 +87,6 @@ const updateFlight = async (req, res) => {
   } catch (error) {
     return res.send({ message: "Something Went Wrong" });
   }
-
-  return res.send({ message: "Something Went Wrong" });
 };
 
 module.exports = {

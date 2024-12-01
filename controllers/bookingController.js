@@ -29,8 +29,10 @@ const getAllBookings = async (req, res) => {
 };
 const getBooking = async (req, res) => {
   const id = req.params.id;
+
   try {
     const result = await getBookingsById(id);
+
     res.send(result);
   } catch (error) {
     res.send({ message: "Something Went Wrong" });
@@ -66,4 +68,10 @@ const updateBooking = async (req, res) => {
     return res.send({ message: "Something Went Wrong" });
   }
 };
-module.exports = { createBookings, getAllBookings, getBooking, deleteBooking };
+module.exports = {
+  createBookings,
+  getAllBookings,
+  getBooking,
+  deleteBooking,
+  updateBooking,
+};

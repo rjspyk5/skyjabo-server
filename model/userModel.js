@@ -12,6 +12,9 @@ const createUser = async (username, email, password, role) => {
   return await userCollection.create({ username, email, password, role });
 };
 
+const getUserFromDb = async (id) => {
+  return await userCollection.findOne({ _id: id }, { email: 1 });
+};
 const findUserByEmail = async (email) => {
   return await userCollection.findOne({ email: email });
 };
@@ -19,4 +22,4 @@ const findUserById = async (id) => {
   return await userCollection.findById(id);
 };
 
-module.exports = { createUser, findUserById, findUserByEmail };
+module.exports = { createUser, findUserById, findUserByEmail, getUserFromDb };

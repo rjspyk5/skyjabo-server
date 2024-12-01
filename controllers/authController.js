@@ -1,5 +1,9 @@
 const bcrypt = require("bcrypt");
-const { findUserByEmail, createUser } = require("../model/userModel");
+const {
+  findUserByEmail,
+  createUser,
+  getUserFromDb,
+} = require("../model/userModel");
 const jwt = require("jsonwebtoken");
 
 const register = async (req, res) => {
@@ -58,4 +62,16 @@ const logout = async (req, res) => {
     })
     .send({ message: "Logout Successfully" });
 };
-module.exports = { register, login, logout };
+
+const getUser = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const result = await getUserFromDb(id);
+
+    res.send(result);
+  } catch (error) {
+    console.log(error);
+  }
+};
+module.exports = { register, login, logout, getUser };

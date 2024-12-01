@@ -11,7 +11,9 @@ const bookingsSchema = new mongoose.Schema({
 const bookingCollection = mongoose.model("bookingCollection", bookingsSchema);
 
 const getAllBookingsFromDb = async () => await bookingCollection.find();
-const getBookingsById = async (id) => await bookingCollection.findById(id);
+const getBookingsById = async (id) => {
+  return await bookingCollection.find({ userId: id });
+};
 const createBookingToDb = async (data) => await bookingCollection.create(data);
 const deleteBookingToDb = async (id) =>
   await bookingCollection.deleteOne({ _id: id });

@@ -1,6 +1,11 @@
 const express = require("express");
 const cors = require("cors");
-const { register, login, logout } = require("./controllers/authController");
+const {
+  register,
+  login,
+  logout,
+  getUser,
+} = require("./controllers/authController");
 const connectDb = require("./config/db");
 const { verifyToken } = require("./middlewares/authMiddlewares");
 const cookieParser = require("cookie-parser");
@@ -43,21 +48,21 @@ app.get("/", (req, res) => res.send("Test"));
 app.post("/register", register);
 app.post("/login", login);
 app.post("/logout", logout);
+app.get("/user/:id", getUser);
 app.get("/authstate", verifyToken, async (req, res) => res.send(req?.user));
 // flights api
 app.get("/flights/search", flightSearch);
-app.get("/flights/:id", getFlight);
+app.get("/flight/:id", getFlight);
 app.get("/flights", getAllFlights);
 app.get("/admin/flight", getAllFlights);
 app.post("/flights", createFlight);
 app.post("/flights", createFlight);
 app.delete("/flights/:id", deleteFlightById);
 app.put("/flights/:id", updateFlight);
-
 // bookings api
+app.get("/booking/user/:id", getBooking);
 app.post("/bookings", createBookings);
-app.get("/bookings", getAllBookings);
-app.get("bookings/user/:id", getBooking);
-app.delete("/bookings/:id", deleteBooking);
 
+app.get("/bookings", getAllBookings);
+app.delete("/bookings/:id", deleteBooking);
 app.listen(port, () => console.log("server is running"));
