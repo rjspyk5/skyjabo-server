@@ -2,6 +2,7 @@ const {
   createBookingToDb,
   getAllBookingsFromDb,
   getBookingsById,
+  deleteBookingToDb,
 } = require("../model/bookingsModel");
 
 const createBookings = async (req, res) => {
@@ -34,4 +35,18 @@ const getBooking = async (req, res) => {
     res.send({ message: "Something Went Wrong" });
   }
 };
-module.exports = { createBookings, getAllBookings, getBooking };
+
+const deleteBooking = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const result = await deleteBookingToDb(id);
+    if (result.deletedCount) {
+      res.send({ message: "Delete Booking Successfully" });
+    } else {
+      res.send({ message: "Something Went Wrong" });
+    }
+  } catch (error) {
+    res.send({ message: "Something Went Wrong" });
+  }
+};
+module.exports = { createBookings, getAllBookings, getBooking, deleteBooking };

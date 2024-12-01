@@ -10,10 +10,13 @@ const {
   getAllFlights,
   deleteFlightById,
   updateFlight,
+  getFlight,
 } = require("./controllers/flightsController");
 const {
   createBookings,
   getAllBookings,
+  getBooking,
+  deleteBooking,
 } = require("./controllers/bookingController");
 
 require("dotenv").config();
@@ -35,23 +38,26 @@ app.use(
 );
 //
 
-//public
 app.get("/", (req, res) => res.send("Test"));
+// auth api
 app.post("/register", register);
 app.post("/login", login);
 app.post("/logout", logout);
 app.get("/authstate", verifyToken, async (req, res) => res.send(req?.user));
+// flights api
 app.get("/flights/search", flightSearch);
+app.get("/flights/:id", getFlight);
+app.get("/flights", getAllFlights);
+app.get("/admin/flight", getAllFlights);
 app.post("/flights", createFlight);
 app.post("/flights", createFlight);
-app.get("/flights/adminadded", getAllFlights);
 app.delete("/flights/:id", deleteFlightById);
 app.put("/flights/:id", updateFlight);
-app.get("/flights", getAllFlights);
+
+// bookings api
 app.post("/bookings", createBookings);
 app.get("/bookings", getAllBookings);
+app.get("bookings/user/:id", getBooking);
+app.delete("/bookings/:id", deleteBooking);
 
-// protected
-
-// protected+admin only
 app.listen(port, () => console.log("server is running"));

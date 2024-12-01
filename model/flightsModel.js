@@ -16,7 +16,8 @@ const flightCollection = mongoose.model("flightCollection", flightsSchema);
 const getAllFlightsFromDb = async () => await flightCollection.find();
 const getFlightsById = async (id) => await flightCollection.findById(id);
 const createFlightToDb = async (data) => await flightCollection.create(data);
-const deleteFlight = async (id) => await flightCollection.findByIdAndDelete(id);
+const deleteFlight = async (id) =>
+  await flightCollection.deleteOne({ _id: id });
 const updatFlightToDb = async (id, data) =>
   await flightCollection.updateOne({ _id: id }, { $set: data });
 

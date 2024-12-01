@@ -4,6 +4,7 @@ const {
   getAllFlightsFromDb,
   deleteFlight,
   updatFlightToDb,
+  getFlightsById,
 } = require("../model/flightsModel");
 const amadeus = new Amadeus({
   clientId: process.env.AMADEUS_CLIENT_ID,
@@ -41,6 +42,16 @@ const getAllFlights = async (req, res) => {
     const result = await getAllFlightsFromDb();
     res.send(result);
   } catch (error) {
+    console.log("Error fetching flights:", error);
+    res.send({ message: "Something Went Wrong" });
+  }
+};
+const getFlight = async (req, res) => {
+  const id = req.params;
+  try {
+    const result = await getFlightsById(id);
+    res.send(result);
+  } catch (error) {
     res.send({ message: "Something Went Wrong" });
   }
 };
@@ -49,7 +60,11 @@ const deleteFlightById = async (req, res) => {
   const id = req.params.id;
   try {
     const result = await deleteFlight(id);
-    res.send({ message: "Delete Flight Successfully" });
+    if (result.deletedCount) {
+      res.send({ message: "Delete Flight Successfully" });
+    } else {
+      res.send({ message: "Something Went Wrong" });
+    }
   } catch (error) {
     res.send({ message: "Something Went Wrong" });
   }
@@ -71,4 +86,5 @@ module.exports = {
   getAllFlights,
   deleteFlightById,
   updateFlight,
+  getFlight,
 };
