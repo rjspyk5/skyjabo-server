@@ -5,6 +5,7 @@ const flightsSchema = new mongoose.Schema({
   airline: { type: String },
   origin: { type: String },
   destination: { type: String },
+  duration: { type: String },
   date: { type: Date },
   time: { type: String },
   price: { type: Number },
@@ -13,7 +14,8 @@ const flightsSchema = new mongoose.Schema({
 
 const flightCollection = mongoose.model("flightCollection", flightsSchema);
 
-const getAllFlightsFromDb = async () => await flightCollection.find();
+const getAllFlightsFromDb = async (filter) =>
+  await flightCollection.find(filter);
 const getFlightsById = async (id) =>
   await flightCollection.findOne({ _id: id });
 const createFlightToDb = async (data) => await flightCollection.create(data);

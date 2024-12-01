@@ -12,16 +12,32 @@ const amadeus = new Amadeus({
 });
 
 const flightSearch = async (req, res) => {
+  // try {
+  //   const data = await amadeus.shopping.flightOffersSearch.get({
+  //     originLocationCode: "BOS",
+  //     destinationLocationCode: "LON",
+  //     departureDate: "2024-12-05",
+  //     adults: "2",
+  //   });
+  //   res.send(data.data);
+  // } catch (error) {
+  //   console.log(JSON.stringify(error));
+  // }
+
+  let filter = {};
+  const { origin, destination, date } = req.query;
+
+  if (req.query) {
+    filter = { origin, destination, date };
+  }
+
   try {
-    const data = await amadeus.shopping.flightOffersSearch.get({
-      originLocationCode: "BOS",
-      destinationLocationCode: "LON",
-      departureDate: "2024-12-05",
-      adults: "2",
-    });
-    res.send(data.data);
+    const result = await getAllFlightsFromDb(filter);
+
+    res.send(result);
   } catch (error) {
-    console.log(JSON.stringify(error));
+    console.log("Error fetching flights:", error);
+    res.send({ message: "Something Went Wrong" });
   }
 };
 
@@ -39,7 +55,7 @@ const createFlight = async (req, res) => {
 
 const getAllFlights = async (req, res) => {
   try {
-    const result = await getAllFlightsFromDb();
+    const result = await getAllFlightsFromDb({});
     res.send(result);
   } catch (error) {
     console.log("Error fetching flights:", error);

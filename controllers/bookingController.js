@@ -1,3 +1,5 @@
+const { mszFormater } = require("../lib/mszFormater");
+const { sendemail } = require("../lib/sendMail");
 const {
   createBookingToDb,
   getAllBookingsFromDb,
@@ -12,9 +14,11 @@ const createBookings = async (req, res) => {
   try {
     const result = await createBookingToDb(data);
     if (result) {
+      sendemail(data?.email, mszFormater(data));
       res.send({ message: "Booking Flight Successfully" });
     }
   } catch (error) {
+    console.log(error);
     res.send({ message: "Something Went Wrong" });
   }
 };

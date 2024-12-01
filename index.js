@@ -22,6 +22,7 @@ const {
   getAllBookings,
   getBooking,
   deleteBooking,
+  updateBooking,
 } = require("./controllers/bookingController");
 
 require("dotenv").config();
@@ -62,7 +63,7 @@ app.put("/flights/:id", updateFlight);
 // bookings api
 app.get("/booking/user/:id", getBooking);
 app.post("/bookings", createBookings);
-
+app.put("/booking/cancel/:id", updateBooking);
 app.get("/bookings", getAllBookings);
 app.delete("/bookings/:id", deleteBooking);
 app.listen(port, () => console.log("server is running"));
