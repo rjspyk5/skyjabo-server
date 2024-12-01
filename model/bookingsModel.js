@@ -15,10 +15,13 @@ const getBookingsById = async (id) => await bookingCollection.findById(id);
 const createBookingToDb = async (data) => await bookingCollection.create(data);
 const deleteBookingToDb = async (id) =>
   await bookingCollection.deleteOne({ _id: id });
+const updateBookingToDb = async (id, data) =>
+  await bookingCollection.updateOne({ _id: id }, { $set: { data } });
 
 module.exports = {
   getAllBookingsFromDb,
   getBookingsById,
   createBookingToDb,
   deleteBookingToDb,
+  updateBookingToDb,
 };

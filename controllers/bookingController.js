@@ -3,6 +3,7 @@ const {
   getAllBookingsFromDb,
   getBookingsById,
   deleteBookingToDb,
+  updateBookingToDb,
 } = require("../model/bookingsModel");
 
 const createBookings = async (req, res) => {
@@ -47,6 +48,22 @@ const deleteBooking = async (req, res) => {
     }
   } catch (error) {
     res.send({ message: "Something Went Wrong" });
+  }
+};
+
+const updateBooking = async (req, res) => {
+  const id = req.params.id;
+  const data = req.body;
+
+  try {
+    const result = await updateBookingToDb(id, data);
+    if (result.modifiedCount) {
+      return res.send({ message: "Update Successfully" });
+    } else {
+      return res.send({ message: "Something Went Wrong" });
+    }
+  } catch (error) {
+    return res.send({ message: "Something Went Wrong" });
   }
 };
 module.exports = { createBookings, getAllBookings, getBooking, deleteBooking };

@@ -73,10 +73,17 @@ const deleteFlightById = async (req, res) => {
 const updateFlight = async (req, res) => {
   const id = req.params.id;
   const data = req.body;
-  const result = await updatFlightToDb(id, data);
-  if (result.modifiedCount) {
-    return res.send({ message: "Update Successfully" });
+  try {
+    const result = await updatFlightToDb(id, data);
+    if (result.modifiedCount) {
+      return res.send({ message: "Update Successfully" });
+    } else {
+      return res.send({ message: "Something Went Wrong" });
+    }
+  } catch (error) {
+    return res.send({ message: "Something Went Wrong" });
   }
+
   return res.send({ message: "Something Went Wrong" });
 };
 
