@@ -5,9 +5,10 @@ const {
   login,
   logout,
   getUser,
+  updateUser,
 } = require("./controllers/authController");
 const connectDb = require("./config/db");
-const { verifyToken } = require("./middlewares/authMiddlewares");
+const { verifyToken, verifyAdmin } = require("./middlewares/authMiddlewares");
 const cookieParser = require("cookie-parser");
 const {
   flightSearch,
@@ -49,21 +50,22 @@ app.get("/", (req, res) => res.send("Test"));
 app.post("/register", register);
 app.post("/login", login);
 app.post("/logout", logout);
-app.get("/user/:id", getUser);
+app.get("/user/:id", verifyToken, getUser);
+app.put("/user/:id", verifyToken, updateUser);
 app.get("/authstate", verifyToken, async (req, res) => res.send(req?.user));
 // flights api
 app.get("/flights/search", flightSearch);
 app.get("/flight/:id", getFlight);
 app.get("/flights", getAllFlights);
-app.get("/admin/flight", getAllFlights);
-app.post("/flights", createFlight);
-app.post("/flights", createFlight);
-app.delete("/flights/:id", deleteFlightById);
-app.put("/flights/:id", updateFlight);
+app.get("/admin/flight", verifyToken, verifyAdmin, getAllFlights);
+app.post("/flights", verifyToken, verifyAdmin, createFlight);
+
+app.delete("/flights/:id", verifyToken, verifyAdmin, deleteFlightById);
+app.put("/flights/:id", verifyToken, verifyAdmin, updateFlight);
 // bookings api
-app.get("/booking/user/:id", getBooking);
-app.post("/bookings", createBookings);
-app.put("/booking/cancel/:id", updateBooking);
-app.get("/bookings", getAllBookings);
-app.delete("/bookings/:id", deleteBooking);
+app.get("/booking/user/:id", verifyToken, getBooking);
+app.post("/bookings", verifyToken, createBookings);
+app.put("/booking/cancel/:id", verifyToken, updateBooking);
+app.get("/bookings", verifyToken, verifyAdmin, getAllBookings);
+app.delete("/bookings/:id", verifyToken, verifyAdmin, deleteBooking);
 app.listen(port, () => console.log("server is running"));

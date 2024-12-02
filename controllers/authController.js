@@ -3,6 +3,7 @@ const {
   findUserByEmail,
   createUser,
   getUserFromDb,
+  updateUserFromDb,
 } = require("../model/userModel");
 const jwt = require("jsonwebtoken");
 
@@ -17,6 +18,23 @@ const register = async (req, res) => {
   const result = await createUser("test", userDetails?.email, hashedPass, 1);
   if (result?._id) {
     return res.send({ message: "User Created Successflly,Now you can login" });
+  }
+};
+
+const updateUser = async (req, res) => {
+  const data = req.body;
+  const id = req.params.id;
+
+  try {
+    const result = await updateUserFromDb(id, data);
+
+    if (result.modifiedCount) {
+      return res.send({ message: "Update Successfully" });
+    } else {
+      return res.send({ message: "Something Went Wrong" });
+    }
+  } catch (error) {
+    return res.send({ message: "Something Went Wrong" });
   }
 };
 
@@ -74,4 +92,4 @@ const getUser = async (req, res) => {
     console.log(error);
   }
 };
-module.exports = { register, login, logout, getUser };
+module.exports = { register, login, logout, getUser, updateUser };
