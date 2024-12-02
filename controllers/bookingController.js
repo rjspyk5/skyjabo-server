@@ -18,7 +18,6 @@ const createBookings = async (req, res) => {
       res.send({ message: "Booking Flight Successfully" });
     }
   } catch (error) {
-    console.log(error);
     res.send({ message: "Something Went Wrong" });
   }
 };

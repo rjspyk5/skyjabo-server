@@ -19,6 +19,20 @@ const verifyToken = async (req, res, next) => {
     next();
   });
 };
+const verifyTokenAndGiveUser = async (req, res, next) => {
+  const token = req?.cookies?.token;
+
+  if (!token) {
+    return res.send(false);
+  }
+  jwt.verify(token, process.env.ACCESS_TOKEN, (err, decoded) => {
+    if (err) {
+      return res.status(401).send({ message: "Invalid or expired token" });
+    }
+    req.user = decoded;
+    next();
+  });
+};
 
 const verifyAdmin = async (req, res, next) => {
   const roleValue = req.user.role === 0 ? true : false;
@@ -29,4 +43,4 @@ const verifyAdmin = async (req, res, next) => {
   next();
 };
 
-module.exports = { verifyToken, verifyAdmin };
+module.exports = { verifyToken, verifyAdmin, verifyTokenAndGiveUser };

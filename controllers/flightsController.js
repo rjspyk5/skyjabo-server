@@ -11,7 +11,7 @@ const amadeus = new Amadeus({
   clientSecret: process.env.AMADEUS_CLIENT_SECRET,
 });
 
-const flightSearch = async (req, res) => {
+const flightSearchh = async (req, res) => {
   // try {
   //   const data = await amadeus.shopping.flightOffersSearch.get({
   //     originLocationCode: "BOS",
@@ -36,8 +36,36 @@ const flightSearch = async (req, res) => {
 
     res.send(result);
   } catch (error) {
-    console.log("Error fetching flights:", error);
     res.send({ message: "Something Went Wrong" });
+  }
+};
+const flightSearch = async (req, res) => {
+  let filter = {};
+  const { origin, destination, date } = req.query;
+
+  if (origin) {
+    filter.origin = { $regex: origin, $options: "i" };
+  }
+  if (destination) {
+    filter.destination = { $regex: destination, $options: "i" };
+  }
+
+  if (date) {
+    const startOfDay = new Date(date);
+    startOfDay.setUTCHours(0, 0, 0, 0);
+
+    const endOfDay = new Date(date);
+    endOfDay.setUTCHours(23, 59, 59, 999);
+
+    filter.date = { $gte: startOfDay, $lt: endOfDay };
+  }
+
+  try {
+    const result = await getAllFlightsFromDb(filter);
+
+    res.send(result);
+  } catch (error) {
+    res.status(500).send({ message: "Something Went Wrong" });
   }
 };
 
@@ -58,7 +86,6 @@ const getAllFlights = async (req, res) => {
     const result = await getAllFlightsFromDb({});
     res.send(result);
   } catch (error) {
-    console.log("Error fetching flights:", error);
     res.send({ message: "Something Went Wrong" });
   }
 };
@@ -70,7 +97,6 @@ const getFlight = async (req, res) => {
 
     res.send(result);
   } catch (error) {
-    console.log(error);
     res.send({ message: "Something Went Wrong" });
   }
 };

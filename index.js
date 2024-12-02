@@ -8,7 +8,11 @@ const {
   updateUser,
 } = require("./controllers/authController");
 const connectDb = require("./config/db");
-const { verifyToken, verifyAdmin } = require("./middlewares/authMiddlewares");
+const {
+  verifyToken,
+  verifyAdmin,
+  verifyTokenAndGiveUser,
+} = require("./middlewares/authMiddlewares");
 const cookieParser = require("cookie-parser");
 const {
   flightSearch,
@@ -39,7 +43,11 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(
   cors({
-    origin: ["http://localhost:5174", "http://localhost:5173"],
+    origin: [
+      "https://skyjabo.web.app",
+      "https://skyjabo.firebaseapp.com",
+      "http://localhost:5173",
+    ],
     credentials: true,
   })
 );
@@ -52,7 +60,9 @@ app.post("/login", login);
 app.post("/logout", logout);
 app.get("/user/:id", verifyToken, getUser);
 app.put("/user/:id", verifyToken, updateUser);
-app.get("/authstate", verifyToken, async (req, res) => res.send(req?.user));
+app.get("/authstate", verifyTokenAndGiveUser, async (req, res) =>
+  res.send(req?.user)
+);
 // flights api
 app.get("/flights/search", flightSearch);
 app.get("/flight/:id", getFlight);
