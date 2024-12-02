@@ -60,11 +60,16 @@ const deleteBooking = async (req, res) => {
 const updateBooking = async (req, res) => {
   const id = req.params.id;
   const data = req.body;
-
   try {
     const result = await updateBookingToDb(id, data);
     if (result.modifiedCount) {
-      return res.send({ message: "Update Successfully" });
+      let message = {};
+      if (req.body.bookingStatus === "cancelled") {
+        message.message = "Booking has been cancel";
+      } else {
+        message.message = "Booking has been delete successfully";
+      }
+      return res.send(message);
     } else {
       return res.send({ message: "Something Went Wrong" });
     }

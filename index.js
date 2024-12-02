@@ -63,8 +63,9 @@ app.delete("/flights/:id", verifyToken, verifyAdmin, deleteFlightById);
 app.put("/flights/:id", verifyToken, verifyAdmin, updateFlight);
 // bookings api
 app.get("/booking/user/:id", verifyToken, getBooking);
-app.post("/bookings", verifyToken, createBookings);
-app.put("/booking/cancel/:id", verifyToken, updateBooking);
 app.get("/bookings", verifyToken, verifyAdmin, getAllBookings);
+app.post("/bookings", verifyToken, createBookings);
+app.put("/bookings/:id", verifyToken, verifyAdmin, updateBooking);
+app.put("/booking/cancel/:id", verifyToken, updateBooking);
 app.delete("/bookings/:id", verifyToken, verifyAdmin, deleteBooking);
 app.listen(port, () => console.log("server is running"));
