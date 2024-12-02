@@ -21,7 +21,9 @@ const verifyToken = async (req, res, next) => {
 };
 
 const verifyAdmin = async (req, res, next) => {
-  if (!req.user.role) {
+  const roleValue = req.user.role === 0 ? true : false;
+
+  if (!roleValue) {
     return res.status(403).send({ message: "Access denied" });
   }
   next();

@@ -59,7 +59,6 @@ app.get("/flight/:id", getFlight);
 app.get("/flights", getAllFlights);
 app.get("/admin/flight", verifyToken, verifyAdmin, getAllFlights);
 app.post("/flights", verifyToken, verifyAdmin, createFlight);
-
 app.delete("/flights/:id", verifyToken, verifyAdmin, deleteFlightById);
 app.put("/flights/:id", verifyToken, verifyAdmin, updateFlight);
 // bookings api
