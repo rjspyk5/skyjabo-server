@@ -49,6 +49,7 @@ const login = async (req, res) => {
   if (!isUser) {
     return res.send({ message: "Couldn't find any account with this email" });
   }
+  const { _id: userId, role: role } = isUser;
   // check password
   const isMatchedPassword = await bcrypt.compare(password, isUser.password);
   if (!isMatchedPassword) {
@@ -67,11 +68,11 @@ const login = async (req, res) => {
   res
     .cookie("token", token, {
       httpOnly: true,
-
+      maxAge: 3000000000,
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
     })
-    .send({ message: "Login Successfull" });
+    .send({ message: "Login Successfull", data: { userId, role } });
 };
 
 const logout = async (req, res) => {

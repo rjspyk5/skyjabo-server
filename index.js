@@ -11,7 +11,7 @@ const connectDb = require("./config/db");
 const {
   verifyToken,
   verifyAdmin,
-  verifyTokenAndGiveUser,
+  isLogin,
 } = require("./middlewares/authMiddlewares");
 const cookieParser = require("cookie-parser");
 const {
@@ -37,21 +37,22 @@ const port = process.env.PORT ?? 5000;
 
 // connect Database
 connectDb();
-
-// middleware
-app.use(cookieParser());
-app.use(express.json());
 app.use(
   cors({
     origin: [
       "https://skyjabo.web.app",
       "https://skyjabo.firebaseapp.com",
+      "https://creative-sherbet-a37e62.netlify.app",
       "http://localhost:5173",
     ],
     credentials: true,
+    optionSuccessStatus: 200,
   })
 );
-//
+
+// middleware
+app.use(cookieParser());
+app.use(express.json());
 
 app.get("/", (req, res) => res.send("Test"));
 // auth api
@@ -60,9 +61,7 @@ app.post("/login", login);
 app.post("/logout", logout);
 app.get("/user/:id", verifyToken, getUser);
 app.put("/user/:id", verifyToken, updateUser);
-app.get("/authstate", verifyTokenAndGiveUser, async (req, res) =>
-  res.send(req?.user)
-);
+app.get("/authstate", isLogin, async (req, res) => res.send(req?.user));
 // flights api
 app.get("/flights/search", flightSearch);
 app.get("/flight/:id", getFlight);
