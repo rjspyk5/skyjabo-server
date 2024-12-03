@@ -5,6 +5,7 @@ const {
   deleteFlight,
   updatFlightToDb,
   getFlightsById,
+  getAllAirelines,
 } = require("../model/flightsModel");
 const amadeus = new Amadeus({
   clientId: process.env.AMADEUS_CLIENT_ID,
@@ -39,9 +40,32 @@ const flightSearchh = async (req, res) => {
     res.send({ message: "Something Went Wrong" });
   }
 };
+
+const getUniqueAirlines = async (req, res) => {
+  try {
+    const result = await getAllAirelines();
+
+    res.send(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Error fetching unique airlines", error });
+  }
+};
+
 const flightSearch = async (req, res) => {
   let filter = {};
-  const { origin, destination, date } = req.query;
+  const {
+    origin,
+    destination,
+    date,
+    minPrice,
+    maxPrice,
+    minDuration,
+    maxDuration,
+    minSeats,
+    maxSeats,
+    airlines,
+  } = req.query;
 
   if (origin) {
     filter.origin = { $regex: origin, $options: "i" };
@@ -60,9 +84,30 @@ const flightSearch = async (req, res) => {
     filter.date = { $gte: startOfDay, $lt: endOfDay };
   }
 
+  if (minPrice && maxPrice) {
+    filter.price = { $gte: parseFloat(minPrice), $lte: parseFloat(maxPrice) };
+  }
+
+  if (minDuration && maxDuration) {
+    filter.duration = {
+      $gte: parseFloat(minDuration),
+      $lte: parseFloat(maxDuration),
+    };
+  }
+
+  if (minSeats && maxSeats) {
+    filter.availableSeats = {
+      $gte: parseInt(minSeats),
+      $lte: parseInt(maxSeats),
+    };
+  }
+
+  if (airlines) {
+    filter.airline = { $in: airlines };
+  }
+
   try {
     const result = await getAllFlightsFromDb(filter);
-
     res.send(result);
   } catch (error) {
     res.status(500).send({ message: "Something Went Wrong" });
@@ -138,4 +183,5 @@ module.exports = {
   deleteFlightById,
   updateFlight,
   getFlight,
+  getUniqueAirlines,
 };

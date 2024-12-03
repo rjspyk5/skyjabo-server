@@ -21,6 +21,7 @@ const {
   deleteFlightById,
   updateFlight,
   getFlight,
+  getUniqueAirlines,
 } = require("./controllers/flightsController");
 const {
   createBookings,
@@ -33,7 +34,7 @@ const {
 require("dotenv").config();
 
 const app = express();
-const port = process.env.PORT ?? 5000;
+const port = process.env.PORT ?? 3000;
 
 // connect Database
 connectDb();
@@ -64,6 +65,7 @@ app.put("/user/:id", verifyToken, updateUser);
 app.get("/authstate", isLogin, async (req, res) => res.send(req?.user));
 // flights api
 app.get("/flights/search", flightSearch);
+app.get("/airlines", getUniqueAirlines);
 app.get("/flight/:id", getFlight);
 app.get("/flights", getAllFlights);
 app.get("/admin/flight", verifyToken, verifyAdmin, getAllFlights);
